@@ -16,6 +16,10 @@
  */
 
 const GLib = imports.gi.GLib;
+const util = imports.cgjs.core.module(require, 'util');
+
+const inspected = arg => typeof arg === 'string' ? arg : util.inspect(arg);
+const joined = args => args.map(inspected).join(' ');
 
 this.assert = (value, message) => {
   if (!value) printerr(`\u26D4\uFE0F \x1b[91mAssertion failed:\x1b[0m ${message}`);
@@ -33,10 +37,10 @@ this.countReset = (label = 'default') => {
 };
 
 this.info = (...args) => {
-  print(`\u2139\uFE0F  \x1b[92mInfo:\x1b[0m ${args.join(' ')}`);
+  print(`\u2139\uFE0F  \x1b[92mInfo:\x1b[0m ${joined(args)}`);
 };
 
-this.log = (...args) => print(args.join(' '));
+this.log = (...args) => print(joined(args));
 
 const timers = Object.create(null);
 this.time = (label = 'default') => {
@@ -49,10 +53,10 @@ this.timeEnd = (label = 'default') => {
 };
 
 this.trace = (...args) => {
-  this.info(`Trace: ${args.join(' ')}`);
+  this.info(`Trace: ${joined(args)}`);
   print(new Error('').stack);
 };
 
 this.warn = (...args) => {
-  print(`\u26A0\uFE0F  \x1b[93mWarning:\x1b[0m ${args.join(' ')}`);
+  print(`\u26A0\uFE0F  \x1b[93mWarning:\x1b[0m ${joined(args)}`);
 };
